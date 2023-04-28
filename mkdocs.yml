@@ -1,3 +1,5 @@
-site_name: My Docs
+site_name: Build a full web stack with Docker and AWS Copilot (Rails Edition)
 theme:
   name: material
+nav:
+  - Overview: index.md
