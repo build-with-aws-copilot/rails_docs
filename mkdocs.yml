@@ -5,3 +5,7 @@ nav:
   - Overview: index.md
   - 'Getting Started': getting_started.md
   - 'Bootstrapping First Application': bootstrapping_first_application.md
+extra:
+  analytics:
+    provider: google
+    property: G-3V5Y9CDCVG
