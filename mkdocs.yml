@@ -3,3 +3,5 @@ theme:
   name: material
 nav:
   - Overview: index.md
+  - 'Getting Started': getting_started.md
+  - 'Bootstrapping First Application': bootstrapping_first_application.md
