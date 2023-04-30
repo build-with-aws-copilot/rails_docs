@@ -8,4 +8,7 @@ nav:
 extra:
   analytics:
     provider: google
-    property: G-3V5Y9CDCVG
+    property: 
+    
+markdown_extensions:
+  - admonition
