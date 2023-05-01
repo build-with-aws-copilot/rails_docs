@@ -49,6 +49,7 @@ docker run -p 3000:3000 -e RAILS_MASTER_KEY=$(cat config/master.key) --rm rails7
 
 Open up your browser and go to `localhost:3000`
 <img width="1506" alt="Screen Shot 2023-04-30 at 7 41 48 pm" src="https://user-images.githubusercontent.com/129698988/235346500-0bd6b718-10de-49c0-93db-976ac60d0c21.png">
-Contgratulations, you have successfully running Rails container on your local. Next we will deploy the same image to AWS.
+Contgratulations, you have successfully run Rails container on your local. Next we will deploy the same image to AWS.
 
-## Deploy to AWS
+!!! info
+    At this moment, we only have a Rails skeleton app, there is no caching layer (Redis) or persistence layer (Postgres). We will make sure the skeleton app runs ok on AWS, and then add those layers.

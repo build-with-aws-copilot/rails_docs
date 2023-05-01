@@ -2,14 +2,18 @@ site_name: Build a full web stack with Docker and AWS Copilot (Rails Edition)
 theme:
   name: material
   custom_dir: overrides
+  features:
+    - content.code.copy
+
 nav:
   - Overview: index.md
   - 'Getting Started': getting_started.md
   - 'Bootstrapping First Application': bootstrapping_first_application.md
+  - 'Provisioning Infrastructure on AWS': provisioning_infrastructure.md
 extra:
   analytics:
     provider: google
-    property: 
+    property: G-3V5Y9CDCVG
     
 markdown_extensions:
   - admonition
