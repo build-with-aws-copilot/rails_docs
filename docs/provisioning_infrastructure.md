@@ -43,6 +43,8 @@ aws_secret_access_key=eUdT8KIMDJFIOUJSHEHWEJQAZSDSEJFJFMFbyUrl
 aws_access_key_id=AKIJUYHNBGTRFVBVC904
 aws_secret_access_key=oWzVIUEURHFDKDJFKUHXBCNVJFJIIFKDFIUxxfqj
 ```
+!!! info
+    These are not real credentials
 
 ~/.aws/config
 ```
@@ -59,16 +61,48 @@ region=us-west-2
 ## Create Copilot App
 Earlier this page, we mentioned that our app will be initialized in application account. Let's initialize the app now.
 
-Run the following commands in your local
+Export the application profile
 ```
 export AWS_PROFILE=copilot.application
-export AWS_REGION=us-west-2
 ```
 Initialize the app. We will name our app `rails70`
 ```
 copilot app init rails70
 ```
+<img width="1506" alt="Screen Shot 2023-05-04 at 8 31 18 pm" src="https://user-images.githubusercontent.com/166879/236179871-65ba7a3e-5a50-48ba-9f44-ff12cef26211.png">
+
+After initialisation, run
+```
+copilot app ls
+```
+It should output
+```
+rails70
+```
 
 ## Create Copilot Environments
+### Staging Environment
+Export the staging profile, and create the staging env
+```
+export AWS_PROFILE=copilot.staging
+```
+<img width="1506" alt="Screen Shot 2023-05-04 at 9 01 53 pm" src="https://user-images.githubusercontent.com/166879/236185973-2cd1da2e-17d1-4771-a37e-5304f5fdf511.png">
+
+### Production Environment
+Export the production profile, and create the production env
+```
+export AWS_PROFILE=copilot.prod
+```
+<img width="1506" alt="Screen Shot 2023-05-04 at 9 10 52 pm" src="https://user-images.githubusercontent.com/166879/236187785-2f078467-4b4f-483a-ad93-3a8368255044.png">
+
+After creating staging and production, run
+```
+copilot env ls
+```
+it should return
+```
+prod
+staging
+```
 
 ## Create Copilot Services
