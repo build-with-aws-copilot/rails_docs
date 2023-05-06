@@ -10,7 +10,7 @@ nav:
   - 'Getting Started': getting_started.md
   - 'Creating Dockerfile': creating_dockerfile.md
   - 'Provisioning Infrastructure on AWS': provisioning_infrastructure.md
-  - 'Deploying to AWS': 'deploying_to_aws.md'
+  - 'Deploying Webserver to AWS': 'deploying_webserver_to_aws.md'
 extra:
   analytics:
     provider: google
