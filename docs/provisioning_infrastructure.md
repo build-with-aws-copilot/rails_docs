@@ -80,11 +80,12 @@ It should output
 rails70
 ```
 
-## Create Copilot Environments
+## Create Environments
 ### Staging Environment
 Export the staging profile, and create the staging env
 ```
 export AWS_PROFILE=copilot.staging
+copilot env init
 ```
 <img width="1506" alt="Screen Shot 2023-05-04 at 9 01 53 pm" src="https://user-images.githubusercontent.com/166879/236185973-2cd1da2e-17d1-4771-a37e-5304f5fdf511.png">
 
@@ -92,6 +93,7 @@ export AWS_PROFILE=copilot.staging
 Export the production profile, and create the production env
 ```
 export AWS_PROFILE=copilot.prod
+copilot env init
 ```
 <img width="1506" alt="Screen Shot 2023-05-04 at 9 10 52 pm" src="https://user-images.githubusercontent.com/166879/236187785-2f078467-4b4f-483a-ad93-3a8368255044.png">
 
@@ -105,4 +107,116 @@ prod
 staging
 ```
 
-## Create Copilot Services
+## Create ECS Services
+Now we have created production and staging environments. We're going to create webserver and worker services, so they can run in ECS cluster.
+
+### Webserver Service
+```
+export AWS_PROFILE=copilot.application
+copilot svc init
+Which service type best represents your service's architecture? Load Balanced Web Service
+What do you want to name this service? webserver
+```
+A manifest file will be generated under `copilot/webserver/manifest.yml`
+```
+# The manifest for the "webserver" service.
+# Read the full specification for the "Load Balanced Web Service" type at:
+#  https://aws.github.io/copilot-cli/docs/manifest/lb-web-service/
+
+# Your service name will be used in naming your resources like log groups, ECS services, etc.
+name: webserver
+type: Load Balanced Web Service
+
+# Distribute traffic to your service.
+http:
+  # Requests to this path will be forwarded to your service.
+  # To match all requests you can use the "/" path.
+  path: '/'
+  # You can specify a custom health check path. The default is "/".
+  # healthcheck: '/'
+
+# Configuration for your containers and service.
+image:
+  # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/lb-web-service/#image-build
+  build: Dockerfile
+  # Port exposed through your container to route traffic to it.
+  port: 3000
+
+cpu: 256       # Number of CPU units for the task.
+memory: 512    # Amount of memory in MiB used by the task.
+platform: linux/x86_64  # See https://aws.github.io/copilot-cli/docs/manifest/lb-web-service/#platform
+count: 1       # Number of tasks that should be running in your service.
+exec: true     # Enable running commands in your container.
+network:
+  connect: true # Enable Service Connect for intra-environment traffic between services.
+
+# storage:
+  # readonly_fs: true       # Limit to read-only access to mounted root filesystems.
+ 
+# Optional fields for more advanced use-cases.
+#
+#variables:                    # Pass environment variables as key value pairs.
+#  LOG_LEVEL: info
+
+#secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
+#  GITHUB_TOKEN: GITHUB_TOKEN  # The key is the name of the environment variable, the value is the name of the SSM parameter.
+
+# You can override any of the values defined above by environment.
+#environments:
+#  test:
+#    count: 2               # Number of tasks to run for the "test" environment.
+#    deployment:            # The deployment strategy for the "test" environment.
+#       rolling: 'recreate' # Stops existing tasks before new ones are started for faster deployments.
+```
+### Worker Service
+```
+export AWS_PROFILE=copilot.application
+copilot svc init
+Which service type best represents your service's architecture? Backend Service
+What do you want to name this service? worker
+```
+A manifest file will be generated under `copilot/worker/manifest.yml`
+```
+# The manifest for the "worker" service.
+# Read the full specification for the "Backend Service" type at:
+#  https://aws.github.io/copilot-cli/docs/manifest/backend-service/
+
+# Your service name will be used in naming your resources like log groups, ECS services, etc.
+name: worker
+type: Backend Service
+
+# Your service is reachable at "http://worker.${COPILOT_SERVICE_DISCOVERY_ENDPOINT}:3000" but is not public.
+
+# Configuration for your containers and service.
+image:
+  # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/backend-service/#image-build
+  build: Dockerfile.sidekiq
+  # Port exposed through your container to route traffic to it.
+  port: 3000
+
+cpu: 256       # Number of CPU units for the task.
+memory: 512    # Amount of memory in MiB used by the task.
+platform: linux/x86_64     # See https://aws.github.io/copilot-cli/docs/manifest/backend-service/#platform
+count: 1       # Number of tasks that should be running in your service.
+exec: true     # Enable running commands in your container.
+network:
+  connect: true # Enable Service Connect for intra-environment traffic between services.
+
+# storage:
+  # readonly_fs: true       # Limit to read-only access to mounted root filesystems.
+
+# Optional fields for more advanced use-cases.
+#
+#variables:                    # Pass environment variables as key value pairs.
+#  LOG_LEVEL: info
+
+#secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
+#  GITHUB_TOKEN: GITHUB_TOKEN  # The key is the name of the environment variable, the value is the name of the SSM parameter.
+
+# You can override any of the values defined above by environment.
+#environments:
+#  test:
+#    count: 2               # Number of tasks to run for the "test" environment.
+#    deployment:            # The deployment strategy for the "test" environment.
+#       rolling: 'recreate' # Stops existing tasks before new ones are started for faster deployments.
+```
