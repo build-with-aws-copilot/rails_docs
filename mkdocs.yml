@@ -4,6 +4,8 @@ theme:
   custom_dir: overrides
   features:
     - content.code.copy
+    - navigation.instant
+    - navigation.tracking
 
 nav:
   - Overview: index.md
@@ -15,6 +17,9 @@ extra:
   analytics:
     provider: google
     property: G-3V5Y9CDCVG
+  social:
+    - icon: fontawesome/brands/linkedin 
+      link: https://www.linkedin.com/in/richardchou89/
     
 markdown_extensions:
   - admonition
