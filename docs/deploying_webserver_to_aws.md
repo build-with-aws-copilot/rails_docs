@@ -17,11 +17,12 @@ config.hosts = [
 ]
 ```
 
-## Add Secrets to AWS
+## Add Environment Variables to AWS
 ```
 copilot secret init
 What would you like to name this secret? [? for help] RAILS_MASTER_KEY
 What is the value of secret RAILS_MASTER_KEY in environment prod? # paste the master key from config/master.key to here
+What is the value of secret RAILS_MASTER_KEY in environment staging? # paste the master key from config/master.key to here
 ```
 
 After secrets are added, add following to webserver manifests so the containers can use these environment variables.
