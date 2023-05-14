@@ -11,7 +11,7 @@ value: +Wv3oDIUJSDHCNVBOLQKDIFUDIIIUDIKBK+vUmqc
 
 Create a file `./github/workflows/staging.yml`
 ```
-name: staging deployment
+name: staging webserver deployment
 
 on:
   push:
@@ -48,7 +48,7 @@ When you commit to `develop`, GitHub will trigger the script and deploy your cod
 
 Create a file `./github/workflows/prod.yml`
 ```
-name: production deployment
+name: production webserver deployment
 
 on:
   push:

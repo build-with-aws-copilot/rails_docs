@@ -1,6 +1,22 @@
 !!! info
     By default, backend services will be launched in public subnet, and therefore have internet access. You can also launch backend services in private subnet, and use NAT gateway to access the internet.
 
+## Add Environment Variables to AWS
+
+```
+copilot secret init
+What would you like to name this secret? [? for help] REDIS_HOST
+What is the value of secret REDIS_HOST in environment prod?
+What is the value of secret REDIS_HOST in environment staging?
+```
+
+```
+copilot secret init
+What would you like to name this secret? [? for help] REDIS_PORT
+What is the value of secret REDIS_HOST in environment prod?
+What is the value of secret REDIS_HOST in environment staging?
+```
+
 ## Setup Sidekiq
 
 config/routes.rb
@@ -122,4 +138,70 @@ EXPOSE 3000
 CMD ["bundle", "exec", "sidekiq", "-C", "/rails/config/sidekiq_worker.yml"]
 ```
 
-## Deploy Worker
+## Staging Deployment
+```
+name: staging worker deployment
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  copilot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install copilot
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          # download copilot
+          curl -Lo copilot-linux https://github.com/aws/copilot-cli/releases/download/v1.27.0/copilot-linux && \
+          # make copilot bin executable
+          chmod +x copilot-linux && \
+          # move to path
+          mv copilot-linux $GITHUB_WORKSPACE/bin/copilot && \
+          # add to PATH
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: prod worker deployment
+        run: copilot svc deploy -n worker -e staging -a rails70
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_TOOLS }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_TOOLS }}
+          AWS_REGION: us-west-2
+          DOCKER_BUILDKIT: 1
+```
+
+## Production Deployment
+```
+name: production worker deployment
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  copilot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install copilot
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          # download copilot
+          curl -Lo copilot-linux https://github.com/aws/copilot-cli/releases/download/v1.27.0/copilot-linux && \
+          # make copilot bin executable
+          chmod +x copilot-linux && \
+          # move to path
+          mv copilot-linux $GITHUB_WORKSPACE/bin/copilot && \
+          # add to PATH
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: prod worker deployment
+        run: copilot svc deploy -n worker -e prod -a rails70
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_TOOLS }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_TOOLS }}
+          AWS_REGION: us-west-2
+          DOCKER_BUILDKIT: 1
+```
