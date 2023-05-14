@@ -1,4 +1,26 @@
+!!! info
+    By default, backend services will be launched in public subnet, and therefore have internet access. You can also launch backend services in private subnet, and use NAT gateway to access the internet.
+
 ## Setup Sidekiq
+
+config/routes.rb
+```
+require 'sidekiq/web'
+
+Rails.application.routes.draw do
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  mount Sidekiq::Web => '/sidekiq'
+
+  resources :books, only: %i[index show]
+
+  resources :orders, only: %i[index show]
+
+  # Defines the root path route ("/")
+  # root "articles#index"
+  root "rails/welcome#index"
+end
+```
 
 config/initializers/sidekiq.rb
 ```
@@ -20,6 +42,11 @@ config/sidekiq_worker.yml
 :queues:
   - default
   - low
+```
+
+config/environments/production.rb
+```
+config.active_job.queue_adapter = :sidekiq
 ```
 
 ## Create Dockerfile.sidekiq
