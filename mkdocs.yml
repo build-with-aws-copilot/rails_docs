@@ -13,13 +13,13 @@ nav:
   - 'Creating Dockerfile': creating_dockerfile.md
   - 'Provisioning Infrastructure on AWS': provisioning_infrastructure.md
   - 'Deploying Webserver to AWS': 'deploying_webserver_to_aws.md'
+  - 'Rails Console': 'rails_console.md'
   - 'CI/CD on GitHub Actions': 'ci_cd.md'
   - 'Adding Redis': 'adding_redis.md'
   - 'Deploying Worker to AWS': 'deploying_worker_to_aws.md'
   - 'Overriding Copilot Defaults': 'overriding_copilot_defaults.md'
   - 'Adding Postgres': 'adding_postgres.md'
   - 'Database Migration': 'database_migration.md'
-  - 'Rails Console': 'rails_console.md'
   - 'Adding SSL/TLS Certificate': 'adding_ssl_tls_certificate.md'
   - 'Adding Your Domain': 'adding_your_domain.md'
 extra:
