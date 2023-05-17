@@ -23,16 +23,15 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 Add migration to GitHub Actions:
 ```
-name: Docker Image CI
+name: production webserver deployment
 
 on:
   push:
-    branches: [ "main", "develop", "test" ]
+    branches: [ "main" ]
 
 jobs:
   copilot:
     runs-on: ubuntu-latest
-    #environment: Staging
     steps:
       - uses: actions/checkout@v3
       - name: Install copilot
