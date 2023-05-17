@@ -120,12 +120,3 @@ Which service type best represents your service's architecture? Load Balanced We
 What do you want to name this service? webserver
 ```
 A manifest file will be generated under `copilot/webserver/manifest.yml`
-
-### Worker Service
-```
-export AWS_PROFILE=copilot.application
-copilot svc init
-Which service type best represents your service's architecture? Backend Service
-What do you want to name this service? worker
-```
-A manifest file will be generated under `copilot/worker/manifest.yml`

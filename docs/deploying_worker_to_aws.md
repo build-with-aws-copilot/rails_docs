@@ -138,7 +138,28 @@ EXPOSE 3000
 CMD ["bundle", "exec", "sidekiq", "-C", "/rails/config/sidekiq_worker.yml"]
 ```
 
-## Staging Deployment
+## Worker Service
+```
+export AWS_PROFILE=copilot.application
+copilot svc init
+Which service type best represents your service's architecture? Backend Service
+What do you want to name this service? worker
+```
+A manifest file will be generated under `copilot/worker/manifest.yml`
+
+## Deploy Worker
+
+Now we're ready to deploy worker to AWS. Run
+```
+copilot svc deploy --app rails70 --env staging --name worker # push to staging
+copilot svc deploy --app rails70 --env prod --name worker # push to production
+```
+
+## Move Deployment to GitHub Actions
+### Staging Environment
+
+Add following to `./github/workflows/staging.yml`
+
 ```
 name: staging worker deployment
 
@@ -172,7 +193,10 @@ jobs:
           DOCKER_BUILDKIT: 1
 ```
 
-## Production Deployment
+### Production Deployment
+
+Add following `./github/workflows/prod.yml`
+
 ```
 name: production worker deployment
 
@@ -205,3 +229,7 @@ jobs:
           AWS_REGION: us-west-2
           DOCKER_BUILDKIT: 1
 ```
+
+## Sidekiq UI
+
+<img width="1511" alt="Screen Shot 2023-05-15 at 10 56 41 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/fb2cc97a-71ed-4a6d-93ef-c4ea13de2f13">

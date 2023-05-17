@@ -3,13 +3,13 @@
 
 Create a Redis server. It must be placed in the same VPC.
 
-Cluster mode should be disabled
+Disable cluster mode.
 
 <img width="1510" alt="Screen Shot 2023-05-14 at 10 42 58 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/ee8adfc6-b8f1-4f91-a137-d3aa39f2dd7c">
 
 ## Security Group
 
-Allow traffic from ECS' security group
+Allow ECS' security group to allowed inbound traffic, so webservers and wokers can talk to Redis.
 
 <img width="1510" alt="Screen Shot 2023-05-14 at 10 35 45 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/154b3f36-ddc6-4f7f-b676-3ed8d41c9b2b">
 
