@@ -1,7 +1,6 @@
 site_name: Build a full web stack with Docker and AWS Copilot (Rails Edition)
 theme:
   name: material
-  custom_dir: overrides
   features:
     - content.code.copy
     - navigation.instant
@@ -23,15 +22,16 @@ nav:
   - 'Adding SSL/TLS Certificate': 'adding_ssl_tls_certificate.md'
   - 'Adding Your Domain': 'adding_your_domain.md'
   - 'Complete Stack': 'complete_stack.md'
+  - 'About the Author': 'about_the_author.md'
 extra:
   analytics:
     provider: google
     property: G-3V5Y9CDCVG
-  social:
-    - icon: fontawesome/brands/linkedin 
-      link: https://www.linkedin.com/in/richardchou89/
     
 markdown_extensions:
   - admonition
   - attr_list
   - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
