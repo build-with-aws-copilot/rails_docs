@@ -22,6 +22,7 @@ nav:
   - 'Database Migration': 'database_migration.md'
   - 'Adding SSL/TLS Certificate': 'adding_ssl_tls_certificate.md'
   - 'Adding Your Domain': 'adding_your_domain.md'
+  - 'Complete Stack': 'complete_stack.md'
 extra:
   analytics:
     provider: google

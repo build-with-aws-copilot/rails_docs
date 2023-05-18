@@ -230,6 +230,6 @@ jobs:
           DOCKER_BUILDKIT: 1
 ```
 
-## Sidekiq UI
+## Sidekiq Running on Production
 
 <img width="1511" alt="Screen Shot 2023-05-15 at 10 56 41 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/fb2cc97a-71ed-4a6d-93ef-c4ea13de2f13">

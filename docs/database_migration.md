@@ -65,3 +65,6 @@ jobs:
 
 !!! info
     The migration is run after code has been deployed. If you place the migration before the deployment, since the code hasn't been deployed, nothing will be run.
+
+## DB Migration Running in GitHub Actions
+<img width="1509" alt="Screen Shot 2023-05-18 at 7 19 19 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/981018f3-c835-4435-9314-82b54b96f482">

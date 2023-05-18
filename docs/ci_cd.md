@@ -80,3 +80,6 @@ jobs:
           DOCKER_BUILDKIT: 1
 ```
 When you commit to `main`, GitHub will trigger the script and deploy your code to prod account.
+
+## Deployment on GitHub Actions
+<img width="1508" alt="Screen Shot 2023-05-18 at 7 11 47 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/f27cda12-3aa6-4998-a8f5-df5986c4e3a5">

@@ -72,3 +72,6 @@ production:
   host: <%= ENV['RDS_HOSTNAME'] %>
   port: <%= ENV['RDS_PORT'] %>
 ```
+
+## Postgres Running on Production
+<img width="1511" alt="Screen Shot 2023-05-15 at 10 55 42 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/cd6b179f-e2f0-4a67-b93e-cdf811a3d57f">
