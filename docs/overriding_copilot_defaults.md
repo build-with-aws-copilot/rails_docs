@@ -2,26 +2,19 @@ When deploying to ECS, ECS will receive `SIGTERM`, it is a signal asking contain
 
 The default wait time `stopTimeout` can be overridden in Copilot. We will extend wait time to 50 seconds:
 
-copilot/webserver/overrides/cfn.patches.yml
+Run
+```
+copilot svc override
+```
 
+This will generate the following files:
+```
+copilot/webserver/overrides/cfn.patches.yml
 copilot/worker/overrides/cfn.patches.yml
 ```
-# Delete the task role resource
-# - op: remove
-#   path: /Resources/TaskRole
 
-# Add a service connect alias
-# - op: add
-#   path: /Resources/Service/Properties/ServiceConnectConfiguration/Services/0/ClientAliases/-
-#   value:
-#     Port: !Ref TargetPort
-#     DnsName: yamlpatchiscool
-
-# Replace the task role in the task definition
-# - op: replace
-#   path: /Resources/TaskDefinition/Properties/TaskRoleArn
-#   value: arn:aws:iam::123456789012:role/MyTaskRole
-
+Add the following command to the yml
+```
 - op: add
   path: /Resources/TaskDefinition/Properties/ContainerDefinitions/0/StopTimeout
   value: 50
