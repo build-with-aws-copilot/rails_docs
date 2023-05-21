@@ -1,4 +1,6 @@
 site_name: Build a full web stack with Docker and AWS Copilot (Rails Edition)
+repo_url: https://github.com/build-with-aws-copilot/rails
+repo_name: build-with-aws-copilot/rails
 theme:
   name: material
   features:
@@ -16,7 +18,7 @@ nav:
   - 'CI/CD on GitHub Actions': 'ci_cd.md'
   - 'Adding Redis': 'adding_redis.md'
   - 'Deploying Worker to AWS': 'deploying_worker_to_aws.md'
-  - 'Overriding Copilot Defaults': 'overriding_copilot_defaults.md'
+  - 'ECS Graceful Shutdown': 'ecs_graceful_shutdown.md'
   - 'Adding Postgres': 'adding_postgres.md'
   - 'Database Migration': 'database_migration.md'
   - 'Adding SSL/TLS Certificate': 'adding_ssl_tls_certificate.md'
