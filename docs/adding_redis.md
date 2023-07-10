@@ -1,7 +1,9 @@
 !!! info
     Here I'm going to create a Redis server with AWS UI. But of course you can use IaC tools such as Terraform, CDK...etc.
 
-Create a Redis server. It must be placed in the same VPC, and cluster mode has to be disabled.
+Create a Redis server.
+
+Single instance mode or with replica, but not the cluster.
 
 <img width="1510" alt="Screen Shot 2023-05-14 at 10 42 58 pm" src="https://github.com/build-with-aws-copilot/rails_docs/assets/129698988/ee8adfc6-b8f1-4f91-a137-d3aa39f2dd7c">
 

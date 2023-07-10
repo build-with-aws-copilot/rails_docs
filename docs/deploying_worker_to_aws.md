@@ -13,8 +13,8 @@ What is the value of secret REDIS_HOST in environment staging?
 ```
 copilot secret init
 What would you like to name this secret? [? for help] REDIS_PORT
-What is the value of secret REDIS_HOST in environment prod?
-What is the value of secret REDIS_HOST in environment staging?
+What is the value of secret REDIS_PORT in environment prod?
+What is the value of secret REDIS_PORT in environment staging?
 ```
 
 ## Setup Sidekiq
