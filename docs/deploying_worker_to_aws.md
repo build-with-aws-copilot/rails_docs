@@ -3,6 +3,8 @@
 
 ## Add Environment Variables to AWS
 
+Create environment variables for redis, so sidekiq and connect it to process jobs:
+
 ```
 copilot secret init
 What would you like to name this secret? [? for help] REDIS_HOST
@@ -65,79 +67,6 @@ config/environments/production.rb
 config.active_job.queue_adapter = :sidekiq
 ```
 
-## Create Dockerfile.sidekiq
-
-```
-# syntax = docker/dockerfile:1.4
-
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=2.7.2
-FROM ruby:$RUBY_VERSION-slim as base
-
-# Rails app lives here
-WORKDIR /rails
-
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_WITHOUT="development:test" \
-    BUNDLE_DEPLOYMENT="1"
-
-# Update gems and bundler
-RUN gem update --system --no-document && \
-    gem install -N bundler
-
-
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential libpq-dev pkg-config redis-tools
-
-# Install application gems
-COPY --link Gemfile Gemfile.lock ./
-RUN bundle install && \
-    bundle exec bootsnap precompile --gemfile && \
-    rm -rf ~/.bundle/ $BUNDLE_PATH/ruby/*/cache $BUNDLE_PATH/ruby/*/bundler/gems/*/.git
-
-# Copy application code
-COPY --link . .
-
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
-
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE=DUMMY ./bin/rails assets:precompile
-
-
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y libsqlite3-0 postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Run and own the application files as a non-root user for security
-RUN useradd rails --home /rails --shell /bin/bash
-USER rails:rails
-
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build --chown=rails:rails /rails /rails
-
-# Deployment options
-ENV RAILS_LOG_TO_STDOUT="1" \
-    RAILS_SERVE_STATIC_FILES="true"
-
-# Entrypoint sets up the container.
-# ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["bundle", "exec", "sidekiq", "-C", "/rails/config/sidekiq_worker.yml"]
-```
-
 ## Worker Service
 ```
 export AWS_PROFILE=copilot.application
@@ -145,7 +74,60 @@ copilot svc init
 Which service type best represents your service's architecture? Backend Service
 What do you want to name this service? worker
 ```
-A manifest file will be generated under `copilot/worker/manifest.yml`
+A manifest file will be generated under `copilot/worker/manifest.yml`.
+
+We can reuse the Dockerfile but override the `command`. So when the container starts, it will be running sidekiq, rather than web server:
+
+`command: ["bundle", "exec", "sidekiq", "-t", "15", "-C", "/rails/config/sidekiq_worker.yml"]`
+
+copilot/worker/manifest.yml
+```
+# The manifest for the "worker" service.
+# Read the full specification for the "Backend Service" type at:
+#  https://aws.github.io/copilot-cli/docs/manifest/backend-service/
+
+# Your service name will be used in naming your resources like log groups, ECS services, etc.
+name: worker
+type: Backend Service
+
+# Your service is reachable at "http://worker.${COPILOT_SERVICE_DISCOVERY_ENDPOINT}:3000" but is not public.
+
+# Configuration for your containers and service.
+image:
+  port: 3000
+  build:
+    dockerfile: /Dockerfile
+    args:
+      AWS_S3_ACCESS_KEY_ID: ${AWS_S3_ACCESS_KEY_ID}
+      AWS_S3_SECRET_ACCESS_KEY: ${AWS_S3_SECRET_ACCESS_KEY}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME}
+      AWS_S3_REGION: ${AWS_S3_REGION}
+      CLOUDFRONT_ENDPOINT: ${CLOUDFRONT_ENDPOINT}
+      APPLE_PEM_PATH: ${APPLE_PEM_PATH}
+      APPLE_TEAM_ID: ${APPLE_TEAM_ID}
+      APPLE_KEY_ID: ${APPLE_KEY_ID}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      AWS_REGION: ${AWS_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AIRBRAKE_PROJECT_ID: ${AIRBRAKE_PROJECT_ID}
+      AIRBRAKE_PROJECT_KEY: ${AIRBRAKE_PROJECT_KEY}
+      T_AUTHENTICATION_SECRET: ${T_AUTHENTICATION_SECRET}
+  
+command: ["bundle", "exec", "sidekiq", "-t", "15", "-C", "/rails/config/sidekiq_worker.yml"]
+cpu: 1024       # Number of CPU units for the task.
+memory: 2048    # Amount of memory in MiB used by the task.
+platform: linux/x86_64     # See https://aws.github.io/copilot-cli/docs/manifest/backend-service/#platform
+count: 1       # Number of tasks that should be running in your service.
+exec: true     # Enable running commands in your container.
+network:
+  connect: true # Enable Service Connect for intra-environment traffic between services.
+
+secrets:
+  REDIS_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/REDIS_HOST
+  REDIS_PORT: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/REDIS_PORT
+```
 
 ## Deploy Worker
 
