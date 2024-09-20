@@ -3,4 +3,3 @@
 Richard Chou is a Lead Developer at [Ezy Raise](https://www.ezyraise.com/), where he assists fundraisers in running successful online fundraising events. He has extensive experience in Ruby/Rails, and he is also a certified professional in AWS.
 
 [:simple-linkedin:](https://www.linkedin.com/in/richardchou89/)
-[:simple-twitter:](https://twitter.com/fyoung89)
