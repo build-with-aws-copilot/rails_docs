@@ -3,10 +3,12 @@ repo_url: https://github.com/build-with-aws-copilot/rails
 repo_name: build-with-aws-copilot/rails
 theme:
   name: material
+  custom_dir: overrides
   features:
     - content.code.copy
     - navigation.instant
     - navigation.tracking
+    - announce.dismiss
 
 nav:
   - Overview: index.md
